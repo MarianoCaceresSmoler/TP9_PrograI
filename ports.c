@@ -5,20 +5,18 @@ typedef unsigned char uint8_t;
 
 typedef union
 {
-	uint16_t portD;
 	struct
 	{
-		uint8_t portA;
 		uint8_t portB;
+		uint8_t portA;
 	};
-} PORTS;
+	uint16_t portD;
+} ports_t;
 
-static PORTS ports;
+static ports_t ports;
 
 static void writePort(char port, uint16_t value);
 static uint16_t getPort(char port);
-
-
 
 void bitSet(char port, int bit)
 {
