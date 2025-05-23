@@ -5,18 +5,18 @@
 #define PORT_B 'B'
 #define PORT_D 'D'
 
-void bitSet(char port, int bit);
+int bitSet(char port, int bit);
 
-void bitCLr(char port, int bit);
+int bitCLr(char port, int bit);
 
-char bitGet(char port, int bit);
+int bitGet(char port, int bit);
 
-void bitToggle(char port, int bit);
+int bitToggle(char port, int bit);
 
-void maskOn(char port, int mask);
+int maskOn(char port, int mask);
 
-void maskOff(char port, int mask);
+int maskOff(char port, int mask);
 
-void maskToggle(char port, int mask);
+int maskToggle(char port, int mask);
 
 #endif /* PORTS_H_ */

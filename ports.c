@@ -1,6 +1,10 @@
 #include "ports.h"
+#include <stdio.h>
 
-#define toUpperCase(arg) ((arg) - 32)
+#define BIT_CHECK(b) (((b) >= 0) && ((b) <= 15))
+#define PORT_CHECK(p) (((p) == PORT_A) || ((p) == PORT_B) || ((p) == PORT_D))
+#define BIT_ERROR_MESSAGE "Wrong port number"
+#define PORT_ERROR_MESSAGE "Port is not defined"
 
 typedef unsigned short int uint16_t;
 typedef unsigned char uint8_t;
@@ -20,62 +24,174 @@ static ports_t ports;
 static void writePort(char port, uint16_t value);
 static uint16_t getPort(char port);
 
-void bitSet(char port, int bit)
+int bitSet(char port, int bit)
 {
-	uint16_t portValue = getPort(port);
-	portValue = portValue | (1<<bit);
-	writePort(port, portValue);
+	uint16_t portValue;
+
+	if(PORT_CHECK(port))
+	{
+		portValue = getPort(port);
+
+		if(BIT_CHECK(bit))
+		{
+			portValue = portValue | (1<<bit);
+			writePort(port, portValue);
+		}
+		else
+		{
+			printf(BIT_ERROR_MESSAGE);
+		}
+
+	}
+	else{
+		printf(PORT_ERROR_MESSAGE);
+		return 0;
+	}
+
+	return portValue;
 }
 
-void bitCLr(char port, int bit)
+int bitCLr(char port, int bit)
 {
-	uint16_t portValue = getPort(port);
-	portValue = portValue & (~(1<<bit));
-	writePort(port, portValue);
+
+	uint16_t portValue;
+
+	if(PORT_CHECK(port))
+	{
+		portValue = getPort(port);
+
+		if(BIT_CHECK(bit))
+		{
+			portValue = portValue & (~(1<<bit));
+			writePort(port, portValue);
+		}
+		else
+		{
+			printf(BIT_ERROR_MESSAGE);
+		}
+	}
+	else
+	{
+		printf(PORT_ERROR_MESSAGE);
+		return 0;
+	}
+
+	return portValue;
 }
 
-char bitGet(char port, int bit)
+int bitGet(char port, int bit)
 {
 	char bitValue;
-	uint16_t portValue = getPort(port);
-	bitValue = ((portValue & (1<<bit)) != 0);
+	uint16_t portValue;
+
+	if(PORT_CHECK(port))
+	{
+		portValue = getPort(port);
+
+		if(BIT_CHECK(bit))
+		{
+			bitValue = ((portValue & (1<<bit)) != 0);
+		}
+		else
+		{
+			printf(BIT_ERROR_MESSAGE);
+		}
+	}
+	else
+	{
+		printf(PORT_ERROR_MESSAGE);
+		return 0;
+	}
+
 	return bitValue;
 }
 
-void bitToggle(char port, int bit)
+int bitToggle(char port, int bit)
 {
-	char bitValue;
-	bitValue = bitGet(port, bit);
+	uint16_t portValue;
 
-	if(bitValue)
+	if(PORT_CHECK(port))
 	{
-		bitCLr(port, bit);
-	}else
+		portValue = getPort(port);
+
+		if(BIT_CHECK(bit))
+		{
+			portValue = portValue ^ (1<<bit);
+			writePort(port, portValue);
+		}
+		else
+		{
+			printf(BIT_ERROR_MESSAGE);
+		}
+	}
+	else
 	{
-		bitSet(port, bit);
+		printf(PORT_ERROR_MESSAGE);
+		return 0;
 	}
 
+	return portValue;
+
 }
 
-void maskOn(char port, int mask)
+int maskOn(char port, int mask)
 {
-	uint16_t portValue = getPort(port);
-	portValue = portValue | mask;
-	writePort(port, portValue);
+	uint16_t portValue;
+
+	if(PORT_CHECK(port))
+	{
+		portValue = getPort(port);
+		portValue = portValue | mask;
+		writePort(port, portValue);
+	}
+	else
+	{
+		printf(PORT_ERROR_MESSAGE);
+		return 0;
+	}
+
+	return portValue;
+
 }
 
-void maskOff(char port, int mask)
+int maskOff(char port, int mask)
 {
-	uint16_t portValue = getPort(port);
-	portValue = portValue & (~mask);
-	writePort(port, portValue);
+	uint16_t portValue;
+
+	if(PORT_CHECK(port))
+	{
+		portValue = getPort(port);
+		portValue = portValue & (~mask);
+		writePort(port, portValue);
+	}
+	else
+	{
+		printf(PORT_ERROR_MESSAGE);
+		return 0;
+	}
+
+	return portValue;
+
 }
 
-void maskToggle(char port, int mask)
+int maskToggle(char port, int mask)
 {
-	uint16_t portValue = getPort(port);
-	portValue = portValue ^ mask;
-	writePort(port, portValue);
+	uint16_t portValue;
+
+	if(PORT_CHECK(port))
+	{
+		portValue = getPort(port);
+		portValue = portValue ^ mask;
+		writePort(port, portValue);
+	}
+	else
+	{
+		printf(PORT_ERROR_MESSAGE);
+		return 0;
+	}
+
+	return portValue;
+
 }
 
 
@@ -83,7 +199,7 @@ static uint16_t getPort(char port)
 {
 	uint16_t value;
 
-	switch(toUpperCase(port))
+	switch(port)
 	{
 	case PORT_A:
 		value = (uint16_t) ports.portA;
@@ -94,7 +210,10 @@ static uint16_t getPort(char port)
 	case PORT_D:
 		value = ports.portD;
 		break;
-	// default: VER MANEJO DE ERRORES
+	default:
+		printf(PORT_ERROR_MESSAGE);
+		value = 0;
+		break;
 	}
 
 	return value;
@@ -113,7 +232,9 @@ static void writePort(char port, uint16_t value)
 	case PORT_D:
 		ports.portD = value;
 		break;
-	// default:; VER MANEJO DE ERRORES
+	default:
+		printf(PORT_ERROR_MESSAGE);
+		break;
 	}
 }
 
