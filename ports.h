@@ -5,18 +5,18 @@
 #define PORT_B 'B'
 #define PORT_D 'D'
 
-int bitSet(char port, int bit);
+void bitSet(char port, int bit); // Funcion para setear en 1 un bit
 
-int bitCLr(char port, int bit);
+void bitClr(char port, int bit); // Funcion para setear en 0 un bit
 
-int bitGet(char port, int bit);
+int bitGet(char port, int bit); // Funcion que devuelve el valor de un bit
 
-int bitToggle(char port, int bit);
+void bitToggle(char port, int bit); // Funcion que alterna el valor de un bit
 
-int maskOn(char port, int mask);
+void maskOn(char port, int mask); // Funcion que prende todos los bits que esten prendidos en la mascara
 
-int maskOff(char port, int mask);
+void maskOff(char port, int mask); // Funcion que apaga todos los bits que esten prendidos en la mascara
 
-int maskToggle(char port, int mask);
+void maskToggle(char port, int mask); // Funcion que alterna todos los bits que esten prendidos en la mascara
 
 #endif /* PORTS_H_ */

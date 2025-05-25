@@ -9,6 +9,7 @@
 typedef unsigned short int uint16_t;
 typedef unsigned char uint8_t;
 
+// Estructura de union para espacio de memoria de los puertos
 typedef union
 {
 	struct
@@ -19,12 +20,16 @@ typedef union
 	uint16_t portD;
 } ports_t;
 
-static ports_t ports;
+static ports_t ports; // Inicializa la variable estatica para los puertos
 
-static void writePort(char port, uint16_t value);
-static uint16_t getPort(char port);
+// Prototipos de funciones privadas para escribir y leer un puerto
+static void writePort(char port, uint16_t value); // Funcion que escribe sobre un puerto
+static uint16_t getPort(char port); // Funcion que devuelve el valor de un puerto
 
-int bitSet(char port, int bit)
+// EN CADA FUNCION, SE REVISA QUE EL PUERTO (PORT_CHECK) Y/O EL BIT (BIT_CHECK) DADOS A LAS FUNCIONES SEAN VALIDOS
+// PRINTEA MENSAJES DE ERROR EN CASO DE RECIBIR DATOS INVALIDOS
+
+void bitSet(char port, int bit)
 {
 	uint16_t portValue;
 
@@ -45,13 +50,11 @@ int bitSet(char port, int bit)
 	}
 	else{
 		printf(PORT_ERROR_MESSAGE);
-		return 0;
 	}
 
-	return portValue;
 }
 
-int bitCLr(char port, int bit)
+void bitClr(char port, int bit)
 {
 
 	uint16_t portValue;
@@ -73,10 +76,8 @@ int bitCLr(char port, int bit)
 	else
 	{
 		printf(PORT_ERROR_MESSAGE);
-		return 0;
 	}
 
-	return portValue;
 }
 
 int bitGet(char port, int bit)
@@ -106,7 +107,7 @@ int bitGet(char port, int bit)
 	return bitValue;
 }
 
-int bitToggle(char port, int bit)
+void bitToggle(char port, int bit)
 {
 	uint16_t portValue;
 
@@ -127,14 +128,11 @@ int bitToggle(char port, int bit)
 	else
 	{
 		printf(PORT_ERROR_MESSAGE);
-		return 0;
 	}
-
-	return portValue;
 
 }
 
-int maskOn(char port, int mask)
+void maskOn(char port, int mask)
 {
 	uint16_t portValue;
 
@@ -147,14 +145,11 @@ int maskOn(char port, int mask)
 	else
 	{
 		printf(PORT_ERROR_MESSAGE);
-		return 0;
 	}
-
-	return portValue;
 
 }
 
-int maskOff(char port, int mask)
+void maskOff(char port, int mask)
 {
 	uint16_t portValue;
 
@@ -167,14 +162,11 @@ int maskOff(char port, int mask)
 	else
 	{
 		printf(PORT_ERROR_MESSAGE);
-		return 0;
 	}
-
-	return portValue;
 
 }
 
-int maskToggle(char port, int mask)
+void maskToggle(char port, int mask)
 {
 	uint16_t portValue;
 
@@ -187,13 +179,9 @@ int maskToggle(char port, int mask)
 	else
 	{
 		printf(PORT_ERROR_MESSAGE);
-		return 0;
 	}
 
-	return portValue;
-
 }
-
 
 static uint16_t getPort(char port)
 {
